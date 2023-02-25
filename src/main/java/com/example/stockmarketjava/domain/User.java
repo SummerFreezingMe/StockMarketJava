@@ -15,13 +15,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-   private  String username;
+    private String username;
     private String email;
     @Id
-   private  String secretKey;
-   private  Role role;
-   private  Float BTC_value;
-   private  Float TON_value;
-   private  Float RUB_value;
+    private String secretKey;
+    private Role role;
+    private Float BTC_value;
+    private Float TON_value;
+    private Float RUB_value;
 
 }

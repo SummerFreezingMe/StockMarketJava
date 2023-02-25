@@ -15,12 +15,13 @@ public class WebConfig implements WebMvcConfigurer {
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 
         configurer.favorParameter(true).
-                        parameterName("mediaType").
-                        ignoreAcceptHeader(false).
+                parameterName("mediaType").
+                ignoreAcceptHeader(false).
                 defaultContentType(MediaType.APPLICATION_JSON).
                 mediaType("xml", MediaType.APPLICATION_XML).
                 mediaType("json", MediaType.APPLICATION_JSON);
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations(
@@ -31,4 +32,5 @@ public class WebConfig implements WebMvcConfigurer {
                 "classpath:/META-INF/resources/webjars/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
 
-    }}
+    }
+}
