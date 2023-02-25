@@ -19,13 +19,13 @@ public class AdministratorController {
     }
 
     @RequestMapping(value = "/change_exchange_rate", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
-    public Object changeExchangeRate(@RequestBody Map<String, String> payload) {
-        return "";
+    public Map<String, String> changeExchangeRate(@RequestBody Map<String, String> payload) {
+        return sms.redactExchangeRate(payload) ;
     }
 
     @RequestMapping(value = "/display_sum_of_currency", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public Object displaySumOfCurrency(@RequestBody Map<String, String> payload) {
-        return "";
+    public Map<String, String> displaySumOfCurrency(@RequestBody Map<String, String> payload) {
+        return sms.displaySumOfCurrency(payload);
     }
 
     @RequestMapping(value = "/display_transaction_count", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
