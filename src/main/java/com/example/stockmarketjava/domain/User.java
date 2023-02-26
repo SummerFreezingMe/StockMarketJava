@@ -19,7 +19,7 @@ public class User {
     private String email;
     @Id
     private String secretKey;
-    private Role role;
+    private String role;
     private Float BTC_value;
     private Float TON_value;
     private Float RUB_value;

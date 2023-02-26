@@ -29,7 +29,7 @@ public class AdministratorController {
     }
 
     @RequestMapping(value = "/display_transaction_count", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public Object displayTransactionCount(@RequestBody Map<String, String> payload) {
+    public Map<String, String> displayTransactionCount(@RequestBody Map<String, String> payload) {
         return
                 sas.displayTransactionCount(payload);
     }

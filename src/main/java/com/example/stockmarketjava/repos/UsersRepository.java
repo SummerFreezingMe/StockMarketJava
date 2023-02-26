@@ -5,6 +5,8 @@ import com.example.stockmarketjava.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UsersRepository extends CrudRepository<User, Long> {
     boolean existsUserByEmail(String email);
@@ -15,8 +17,8 @@ public interface UsersRepository extends CrudRepository<User, Long> {
 
     User findBySecretKey(String secret_key);
 
+    List<User> findUserByRoleIs(String role);
 
-    // @Modifying
-    // @Query("update User u set u.firstname = ?1, u.lastname = ?2 where u.id = ?3")
-    //  void setRUBWallet(float RUB_Value, String secret_key);
+
+
 }

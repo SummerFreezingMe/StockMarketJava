@@ -1,7 +1,6 @@
 package com.example.stockmarketjava.service;
 
 import com.example.stockmarketjava.domain.ExchangeRate;
-import com.example.stockmarketjava.domain.Role;
 import com.example.stockmarketjava.domain.User;
 import com.example.stockmarketjava.repos.ExchangeRateRepository;
 import com.example.stockmarketjava.repos.UsersRepository;
@@ -37,15 +36,16 @@ public class StockMarketService {
     }
 
     public Object userAddition(Map<String, String> userdata) {
+        Map<String, String> model = new HashMap<>();
         if (!userRepository.existsUserByUsername(userdata.get("username")) &&
                 !userRepository.existsUserByEmail(userdata.get("email"))) {
-            Map<String, String> model = new HashMap<>();
+
             String secretKey = generateSecretKey();
             model.put("secret_key", secretKey);
-            userRepository.save(new User(userdata.get("username"), userdata.get("email"), secretKey, Role.USER, 0f, 0f, 0f));
+            userRepository.save(new User(userdata.get("username"), userdata.get("email"), secretKey, "USER", 0f, 0f, 0f));
             return model;
         } else
-            return "Ошибка! Пользователем с таким именем или почтой уже существует!";
+            return model.put("error","Ошибка! Пользователем с таким именем или почтой уже существует!");
     }
 
     public Map<String, String> depositCurrency(Map<String, String> userdata) {
@@ -80,19 +80,19 @@ public class StockMarketService {
                 if (Float.parseFloat(userdata.get("count")) < currentUser.getRUB_value()) {
                     currentUser.setRUB_value(currentUser.getRUB_value() - Float.parseFloat(userdata.get("count")));
                     model.put("RUB_wallet", String.valueOf(currentUser.getRUB_value()));
-                } else model.put("error", "Ошибка! На счёте недостаточно ");
+                } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
             case "BTC" -> {
                 if (Float.parseFloat(userdata.get("count")) < currentUser.getBTC_value()) {
                     currentUser.setBTC_value(currentUser.getBTC_value() - Float.parseFloat(userdata.get("count")));
                     model.put("BTC_wallet", String.valueOf(currentUser.getBTC_value()));
-                } else model.put("error", "Ошибка! На счёте недостаточно ");
+                } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
             case "TON" -> {
                 if (Float.parseFloat(userdata.get("count")) < currentUser.getTON_value()) {
                     currentUser.setTON_value(currentUser.getTON_value() - Float.parseFloat(userdata.get("count")));
                     model.put("TON_wallet", String.valueOf(currentUser.getTON_value()));
-                } else model.put("error", "Ошибка! На счёте недостаточно ");
+                } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
 
         }
@@ -145,7 +145,7 @@ public class StockMarketService {
                         currentUser.setTON_value(currentUser.getTON_value() + Float.parseFloat((userdata.get("amount"))) * fromRUBtoTON);
                         model.put("TON", String.valueOf(currentUser.getTON_value()));
                     }
-                } else model.put("error", "Ошибка! На счёте недостаточно ");
+                } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
             case "BTC" -> {
                 if (Float.parseFloat(userdata.get("amount")) < currentUser.getBTC_value()) {
@@ -160,7 +160,7 @@ public class StockMarketService {
                         currentUser.setTON_value(currentUser.getTON_value() + Float.parseFloat((userdata.get("amount"))) * fromBTCtoTON);
                         model.put("TON", String.valueOf(currentUser.getTON_value()));
                     }
-                } else model.put("error", "Ошибка! На счёте недостаточно ");
+                } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
             case "TON" -> {
                 if (Float.parseFloat(userdata.get("amount")) < currentUser.getRUB_value()) {
@@ -176,7 +176,7 @@ public class StockMarketService {
                         model.put("RUB", String.valueOf(currentUser.getRUB_value()));
                     }
 
-                } else model.put("error", "Ошибка! На счёте недостаточно ");
+                } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
         }
         userRepository.save(currentUser);
