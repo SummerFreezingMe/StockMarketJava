@@ -1,6 +1,6 @@
 package com.example.stockmarketjava.controllers;
 
-import com.example.stockmarketjava.service.StockMarketService;
+import com.example.stockmarketjava.service.StockAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,25 +11,26 @@ import java.util.Map;
 
 @RestController
 public class AdministratorController {
-    private final StockMarketService sms;
+    private final StockAdminService sas;
 
     @Autowired
-    public AdministratorController(StockMarketService sms) {
-        this.sms = sms;
+    public AdministratorController(StockAdminService sas) {
+        this.sas = sas;
     }
 
     @RequestMapping(value = "/change_exchange_rate", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     public Map<String, String> changeExchangeRate(@RequestBody Map<String, String> payload) {
-        return sms.redactExchangeRate(payload) ;
+        return sas.redactExchangeRate(payload);
     }
 
     @RequestMapping(value = "/display_sum_of_currency", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public Map<String, String> displaySumOfCurrency(@RequestBody Map<String, String> payload) {
-        return sms.displaySumOfCurrency(payload);
+        return sas.displaySumOfCurrency(payload);
     }
 
     @RequestMapping(value = "/display_transaction_count", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public Object displayTransactionCount(@RequestBody Map<String, String> payload) {
-        return "";
+        return
+                sas.displayTransactionCount(payload);
     }
 }

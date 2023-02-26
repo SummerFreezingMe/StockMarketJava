@@ -17,7 +17,6 @@ public class StockMarketService {
     private final UsersRepository userRepository;
     private final ExchangeRate exchange_rate;
 
-    private ExchangeRateRepository exchangeRateRepository;
     @Autowired
     public StockMarketService(UsersRepository userRepository, ExchangeRateRepository exchangeRateRepository) {
         this.userRepository = userRepository;
@@ -193,62 +192,4 @@ public class StockMarketService {
         return model;
     }
 
-    public Map<String, String> redactExchangeRate(Map<String, String> userdata) {
-        Map<String, String> model = new HashMap<>();
-        switch (userdata.get("base_currency")) {
-            case ("TON") -> {
-                exchange_rate.setTON(1f);
-                exchange_rate.setBTC(Float.valueOf(userdata.get("BTC")));
-                exchange_rate.setRUB(Float.valueOf(userdata.get("RUB")));
-            }
-            case ("RUB") -> {
-                exchange_rate.setRUB(1f);
-                exchange_rate.setBTC(Float.valueOf(userdata.get("BTC")));
-                exchange_rate.setTON(Float.valueOf(userdata.get("TON")));
-            }
-            case ("BTC") -> {
-                exchange_rate.setBTC(1f);
-                exchange_rate.setTON(Float.valueOf(userdata.get("TON")));
-                exchange_rate.setRUB(Float.valueOf(userdata.get("RUB")));
-            }
-        }
-        exchangeRateRepository.save(exchange_rate);
-        return model;
-    }
-
-    public Map<String, String> displaySumOfCurrency(Map<String, String> userdata) {
-
-        Map<String, String> model = new HashMap<>();
-        Iterable<User> allUsers = userRepository.findAll();
-        Float chosenCurrencySum = 0.0f;
-        String chosenCurrency = userdata.get("currency");
-        switch (chosenCurrency) {
-            case ("TON") -> {
-                for (User user :
-                        allUsers) {
-                    chosenCurrencySum +=user.getTON_value();
-                }
-            }
-            case ("RUB") -> {
-                for (User user :
-                        allUsers) {
-                    chosenCurrencySum +=user.getRUB_value();
-                }
-            }
-            case ("BTC") -> {
-                for (User user :
-                        allUsers) {
-                    chosenCurrencySum += user.getBTC_value();
-                }
-
-            }
-        }
-        model.put(chosenCurrency, String.valueOf(chosenCurrencySum));
-        return model;
-    }
-
-    public Map<String, String> displayTransactionCount(Map<String, String> userdata) {
-        Map<String, String> model = new HashMap<>();
-        return model;
-    }
 }
