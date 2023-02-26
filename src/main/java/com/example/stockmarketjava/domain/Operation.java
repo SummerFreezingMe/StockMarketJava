@@ -1,9 +1,6 @@
 package com.example.stockmarketjava.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,16 +8,24 @@ import lombok.Setter;
 import java.time.LocalDate;
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "operations")
 public class Operation {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long operationId;
     LocalDate operationDate;
     String operationType;
     String username;
     String moneyDifferential;
     String currencyCode;
+
+    public Operation(LocalDate operationDate, String operationType, String username, String moneyDifferential, String currencyCode) {
+        this.operationDate = operationDate;
+        this.operationType = operationType;
+        this.username = username;
+        this.moneyDifferential = moneyDifferential;
+        this.currencyCode = currencyCode;
+    }
 }

@@ -1,12 +1,15 @@
 package com.example.stockmarketjava.service;
 
 import com.example.stockmarketjava.domain.ExchangeRate;
+import com.example.stockmarketjava.domain.Operation;
 import com.example.stockmarketjava.domain.User;
 import com.example.stockmarketjava.repos.ExchangeRateRepository;
+import com.example.stockmarketjava.repos.OperationRepository;
 import com.example.stockmarketjava.repos.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,10 +19,13 @@ public class StockMarketService {
     private final UsersRepository userRepository;
     private final ExchangeRate exchange_rate;
 
+    private final OperationRepository operationRepository;
+
     @Autowired
-    public StockMarketService(UsersRepository userRepository, ExchangeRateRepository exchangeRateRepository) {
+    public StockMarketService(UsersRepository userRepository, ExchangeRateRepository exchangeRateRepository, OperationRepository operationRepository) {
         this.userRepository = userRepository;
         exchange_rate = exchangeRateRepository.findAll().iterator().next();
+        this.operationRepository = operationRepository;
     }
 
     public String generateSecretKey() {
@@ -51,52 +57,69 @@ public class StockMarketService {
     public Map<String, String> depositCurrency(Map<String, String> userdata) {
         Map<String, String> model = new HashMap<>();
         User currentUser = userRepository.findBySecretKey(userdata.get("secret_key"));
+        Operation depositOperation;
         switch (userdata.keySet().toArray()[1].toString()) {
             case ("TON_wallet") -> {
                 currentUser.setTON_value(Float.valueOf(currentUser.getTON_value() + userdata.get("TON_wallet")));
                 model.put("TON_wallet", String.valueOf(currentUser.getTON_value()));
+               depositOperation = new Operation(LocalDate.now(),"deposit", currentUser.getUsername(), userdata.get("TON_wallet"),"TON");
             }
             case ("RUB_wallet") -> {
 
                 currentUser.setRUB_value(currentUser.getRUB_value() + Float.parseFloat(userdata.get("RUB_wallet")));
                 model.put("RUB_wallet", String.valueOf(currentUser.getRUB_value()));
+               depositOperation = new Operation(LocalDate.now(),"deposit", currentUser.getUsername(), userdata.get("RUB_wallet"),"RUB");
             }
             case ("BTC_wallet") -> {
 
                 currentUser.setBTC_value(Float.valueOf(currentUser.getBTC_value() + userdata.get("BTC_wallet")));
                 model.put("BTC_wallet", String.valueOf(currentUser.getBTC_value()));
-            }
+                depositOperation = new Operation(LocalDate.now(),"deposit", currentUser.getUsername(), userdata.get("BTC_wallet"),"BTC");}
 
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + userdata.keySet().toArray()[1].toString());
         }
         userRepository.save(currentUser);
+        operationRepository.save(depositOperation);
+       
         return model;
     }
 
     public Map<String, String> withdrawCurrency(Map<String, String> userdata) {
         Map<String, String> model = new HashMap<>();
         User currentUser = userRepository.findBySecretKey(userdata.get("secret_key"));
+        Operation withdrawOperation;
         switch (userdata.get("currency")) {
             case "RUB" -> {
                 if (Float.parseFloat(userdata.get("count")) < currentUser.getRUB_value()) {
                     currentUser.setRUB_value(currentUser.getRUB_value() - Float.parseFloat(userdata.get("count")));
                     model.put("RUB_wallet", String.valueOf(currentUser.getRUB_value()));
+                    withdrawOperation = new Operation(LocalDate.now(),"withdraw", currentUser.getUsername(), userdata.get("RUB_wallet"),"RUB");
+                    operationRepository.save(withdrawOperation);
                 } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
             case "BTC" -> {
                 if (Float.parseFloat(userdata.get("count")) < currentUser.getBTC_value()) {
                     currentUser.setBTC_value(currentUser.getBTC_value() - Float.parseFloat(userdata.get("count")));
                     model.put("BTC_wallet", String.valueOf(currentUser.getBTC_value()));
+                    withdrawOperation = new Operation(LocalDate.now(),"withdraw", currentUser.getUsername(), userdata.get("BTC_wallet"),"BTC");
+                    operationRepository.save(withdrawOperation);
                 } else model.put("error", "Ошибка! На счёте недостаточно средств");
             }
             case "TON" -> {
                 if (Float.parseFloat(userdata.get("count")) < currentUser.getTON_value()) {
                     currentUser.setTON_value(currentUser.getTON_value() - Float.parseFloat(userdata.get("count")));
                     model.put("TON_wallet", String.valueOf(currentUser.getTON_value()));
+                    withdrawOperation = new Operation(LocalDate.now(),"withdraw", currentUser.getUsername(), userdata.get("TON_wallet"),"TON");
+                    operationRepository.save(withdrawOperation);
                 } else model.put("error", "Ошибка! На счёте недостаточно средств");
+
             }
 
+            default -> throw new IllegalStateException("Unexpected value: " + userdata.get("currency"));
         }
         userRepository.save(currentUser);
+
         return model;
     }
 
@@ -126,14 +149,15 @@ public class StockMarketService {
     public Map<String, String> exchangeCurrency(Map<String, String> userdata) {
         Map<String, String> model = new HashMap<>();
         model.put("secret_key", userdata.get("secret_key"));
-
+        Operation exchangeOperation ;
         User currentUser = userRepository.findBySecretKey(userdata.get("secret_key"));
         switch (userdata.get("currency_from")) {
             case "RUB" -> {
                 if (Float.parseFloat(userdata.get("amount")) < currentUser.getRUB_value()) {
                     currentUser.setRUB_value(currentUser.getRUB_value() - Float.parseFloat((userdata.get("amount"))));
                     model.put("RUB", String.valueOf(currentUser.getRUB_value()));
-
+                    exchangeOperation = new Operation(LocalDate.now(),"exchange", currentUser.getUsername(), userdata.get("amount"),"RUB");
+                    operationRepository.save(exchangeOperation);
                     if (userdata.get("currency_to").equals("BTC")) {
                         float fromRUBtoBTC = exchange_rate.getBTC() / exchange_rate.getRUB();
 
@@ -151,6 +175,8 @@ public class StockMarketService {
                 if (Float.parseFloat(userdata.get("amount")) < currentUser.getBTC_value()) {
                     currentUser.setBTC_value(currentUser.getBTC_value() - Float.parseFloat((userdata.get("amount"))));
                     model.put("BTC", String.valueOf(currentUser.getBTC_value()));
+                    exchangeOperation = new Operation(LocalDate.now(),"exchange", currentUser.getUsername(), userdata.get("amount"),"BTC");
+                    operationRepository.save(exchangeOperation);
                     if (userdata.get("currency_to").equals("RUB")) {
                         float fromBTCtoRUB = exchange_rate.getRUB() / exchange_rate.getBTC();
                         currentUser.setRUB_value(currentUser.getRUB_value() + Float.parseFloat((userdata.get("amount"))) * fromBTCtoRUB);
@@ -166,6 +192,8 @@ public class StockMarketService {
                 if (Float.parseFloat(userdata.get("amount")) < currentUser.getRUB_value()) {
                     currentUser.setTON_value(currentUser.getTON_value() - Float.parseFloat((userdata.get("amount"))));
                     model.put("TON", String.valueOf(currentUser.getTON_value()));
+                    exchangeOperation = new Operation(LocalDate.now(),"exchange", currentUser.getUsername(), userdata.get("amount"),"RUB");
+                    operationRepository.save(exchangeOperation);
                     if (userdata.get("currency_to").equals("BTC")) {
                         float fromTONtoBTC = exchange_rate.getBTC() / exchange_rate.getTON();
                         currentUser.setBTC_value(currentUser.getBTC_value() + Float.parseFloat((userdata.get("amount"))) * fromTONtoBTC);
