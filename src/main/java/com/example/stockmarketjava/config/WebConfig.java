@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         configurer.favorParameter(true).
                 parameterName("mediaType").
-                ignoreAcceptHeader(false).
+                ignoreAcceptHeader(true).
                 defaultContentType(MediaType.APPLICATION_JSON).
                 mediaType("xml", MediaType.APPLICATION_XML).
                 mediaType("json", MediaType.APPLICATION_JSON);

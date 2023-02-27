@@ -18,7 +18,7 @@ public class AdministratorController {
         this.sas = sas;
     }
 
-    @RequestMapping(value = "/change_exchange_rate", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
+    @RequestMapping(value = "/change_exchange_rate", method = RequestMethod.POST, produces = {"application/json", "application/xml"},consumes =   {"application/json", "application/xml"})
     public Map<String, String> changeExchangeRate(@RequestBody Map<String, String> payload) {
         return sas.redactExchangeRate(payload);
     }

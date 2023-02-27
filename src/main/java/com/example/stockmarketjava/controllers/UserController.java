@@ -24,7 +24,9 @@ public class UserController {
         return sms.userAddition(payload);
     }
 
-    @RequestMapping(value = "/get_balance", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    @RequestMapping(value = "/get_balance", method = RequestMethod.GET, produces = {"application/json", "application/xml"},headers ={"Accept=application/json,application/xml"})
+    @ResponseBody
+
     public Map<String, String> getBalance(@RequestParam String secret_key) {
         return sms.getBalance(secret_key);
     }
