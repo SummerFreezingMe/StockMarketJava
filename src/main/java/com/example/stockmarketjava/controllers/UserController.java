@@ -1,7 +1,7 @@
 package com.example.stockmarketjava.controllers;
 
 
-import com.example.stockmarketjava.service.StockMarketService;
+import com.example.stockmarketjava.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,11 +9,11 @@ import java.util.Map;
 
 @RestController
 public class UserController {
-    private final StockMarketService sms;
+    private final UserServiceImpl sms;
 
 
     @Autowired
-    public UserController(StockMarketService sms) {
+    public UserController(UserServiceImpl sms) {
         this.sms = sms;
     }
 
@@ -24,7 +24,7 @@ public class UserController {
         return sms.userAddition(payload);
     }
 
-    @RequestMapping(value = "/get_balance", method = RequestMethod.GET, produces = {"application/json", "application/xml"},headers ={"Accept=application/json,application/xml"})
+    @RequestMapping(value = "/get_balance", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @ResponseBody
 
     public Map<String, String> getBalance(@RequestParam String secret_key) {

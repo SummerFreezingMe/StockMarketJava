@@ -1,4 +1,4 @@
-package com.example.stockmarketjava.service;
+package com.example.stockmarketjava.service.impl;
 
 import com.example.stockmarketjava.domain.ExchangeRate;
 import com.example.stockmarketjava.domain.Operation;
@@ -6,6 +6,7 @@ import com.example.stockmarketjava.domain.User;
 import com.example.stockmarketjava.repos.ExchangeRateRepository;
 import com.example.stockmarketjava.repos.OperationRepository;
 import com.example.stockmarketjava.repos.UsersRepository;
+import com.example.stockmarketjava.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StockAdminService {
+public class AdministratorServiceImpl implements AdministratorService {
 
     private final UsersRepository userRepository;
     private final ExchangeRate exchange_rate;
@@ -25,7 +26,7 @@ public class StockAdminService {
     private final ExchangeRateRepository exchangeRateRepository;
 
     @Autowired
-    public StockAdminService(UsersRepository userRepository, ExchangeRateRepository exchangeRateRepository, OperationRepository operationRepository) {
+    public AdministratorServiceImpl(UsersRepository userRepository, ExchangeRateRepository exchangeRateRepository, OperationRepository operationRepository) {
         this.userRepository = userRepository;
         exchange_rate = exchangeRateRepository.findAll().iterator().next();
         this.exchangeRateRepository = exchangeRateRepository;

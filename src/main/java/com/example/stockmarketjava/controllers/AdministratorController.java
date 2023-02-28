@@ -1,6 +1,6 @@
 package com.example.stockmarketjava.controllers;
 
-import com.example.stockmarketjava.service.StockAdminService;
+import com.example.stockmarketjava.service.impl.AdministratorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,14 +11,14 @@ import java.util.Map;
 
 @RestController
 public class AdministratorController {
-    private final StockAdminService sas;
+    private final AdministratorServiceImpl sas;
 
     @Autowired
-    public AdministratorController(StockAdminService sas) {
+    public AdministratorController(AdministratorServiceImpl sas) {
         this.sas = sas;
     }
 
-    @RequestMapping(value = "/change_exchange_rate", method = RequestMethod.POST, produces = {"application/json", "application/xml"},consumes =   {"application/json", "application/xml"})
+    @RequestMapping(value = "/change_exchange_rate", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     public Map<String, String> changeExchangeRate(@RequestBody Map<String, String> payload) {
         return sas.redactExchangeRate(payload);
     }
