@@ -1,4 +1,4 @@
-package com.example.stockmarketjava.domain;
+package ru.bykov.domain;
 
 import javax.persistence.*;
 import lombok.Getter;

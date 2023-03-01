@@ -1,6 +1,6 @@
-package com.example.stockmarketjava.controllers;
+package ru.bykov.controllers;
 
-import com.example.stockmarketjava.service.impl.AdministratorServiceImpl;
+import ru.bykov.service.impl.AdministratorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

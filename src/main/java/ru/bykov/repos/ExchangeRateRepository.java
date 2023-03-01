@@ -1,7 +1,7 @@
 
-package com.example.stockmarketjava.repos;
+package ru.bykov.repos;
 
-import com.example.stockmarketjava.domain.ExchangeRate;
+import ru.bykov.domain.ExchangeRate;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

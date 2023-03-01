@@ -1,12 +1,12 @@
-package com.example.stockmarketjava.service.impl;
+package ru.bykov.service.impl;
 
-import com.example.stockmarketjava.domain.ExchangeRate;
-import com.example.stockmarketjava.domain.Operation;
-import com.example.stockmarketjava.domain.User;
-import com.example.stockmarketjava.repos.ExchangeRateRepository;
-import com.example.stockmarketjava.repos.OperationRepository;
-import com.example.stockmarketjava.repos.UsersRepository;
-import com.example.stockmarketjava.service.UserService;
+import ru.bykov.domain.ExchangeRate;
+import ru.bykov.domain.Operation;
+import ru.bykov.domain.User;
+import ru.bykov.repos.ExchangeRateRepository;
+import ru.bykov.repos.OperationRepository;
+import ru.bykov.repos.UsersRepository;
+import ru.bykov.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

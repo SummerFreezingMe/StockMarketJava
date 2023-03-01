@@ -1,4 +1,4 @@
-package com.example.stockmarketjava.config;
+package ru.bykov.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;

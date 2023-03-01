@@ -1,7 +1,7 @@
-package com.example.stockmarketjava.controllers;
+package ru.bykov.controllers;
 
 
-import com.example.stockmarketjava.service.impl.UserServiceImpl;
+import ru.bykov.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

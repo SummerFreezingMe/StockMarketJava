@@ -1,12 +1,13 @@
-package com.example.stockmarketjava.domain;
+package ru.bykov.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "users")
 @Entity
@@ -15,6 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
+
     private String username;
     private String email;
     @Id
